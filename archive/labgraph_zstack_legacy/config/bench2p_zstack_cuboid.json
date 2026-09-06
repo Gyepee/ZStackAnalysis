@@ -1,0 +1,74 @@
+{
+  "schema_version": "labgraph.bench2p_zstack_sideview.config.v1",
+  "analysis_state": "exploratory",
+  "input_analysis_id": "bench2p_zstack_single__20260901T173732Z__44d116a2",
+  "input_volume": "volumes/ROS-2335_2026-09-01_scan9G1ZQTYA__100_plane_mean_volume.ome.tif",
+  "display": {
+    "low_percentile": 50.0,
+    "high_percentile": 99.99,
+    "asinh_strength": 2.5
+  },
+  "cuboid_oblique": {
+    "azimuth_deg": -35.0,
+    "elevation_deg": 32.0,
+    "max_dimension_px": 360,
+    "signal_threshold": 0.24,
+    "opacity": 0.14,
+    "edge_thickness_px": 2,
+    "edge_dilation_px": 1,
+    "padding_fraction": 0.12
+  },
+  "side_slabs": {
+    "axis": "y",
+    "center_fractions": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "thickness_um": 6.0
+  },
+  "candidate_detection": {
+    "background_sigma_um": [
+      5.0,
+      12.0,
+      12.0
+    ],
+    "feature_sigma_um": [
+      1.5,
+      1.2,
+      1.2
+    ],
+    "threshold_percentile": 99.8,
+    "minimum_distance_voxels": 10,
+    "exclude_border_voxels": [
+      8,
+      24,
+      24
+    ],
+    "candidate_count": 6,
+    "roi_half_size_um": [
+      12.0,
+      30.0,
+      30.0
+    ],
+    "orthogonal_slab_thickness_um": 6.0
+  },
+  "oblique": {
+    "azimuth_deg": -25.0,
+    "elevation_deg": 20.0,
+    "signal_threshold": 0.08,
+    "attenuation": 0.12
+  },
+  "raw_saturation_qc": {
+    "local_frame_indices": [
+      0,
+      15,
+      30,
+      45,
+      59
+    ]
+  },
+  "figure_profile": "qc",
+  "figure_style_source": "config/figure_style.json",
+  "random_seed": 0
+}

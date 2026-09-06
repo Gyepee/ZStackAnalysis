@@ -1,0 +1,128 @@
+{
+  "schema_version": "labgraph.acquisition_manifest.v1",
+  "manifest_id": "acq__ROS-2335_2026-09-10_scanEXAMPLE_sessEXAMPLE",
+  "created_at_utc": "2026-09-10T20:00:00Z",
+  "identity": {
+    "animal_id": "ROS-2335",
+    "acquisition_date": "2026-09-10",
+    "scan_id": "scanEXAMPLE",
+    "session_id": "sessEXAMPLE",
+    "operator_id": "JJ"
+  },
+  "acquisition_purpose": "Goal experiment with synchronized mini2p imaging and behavior",
+  "temporal_context": {
+    "surgery_date": "2026-08-28",
+    "post_surgery_day": 13
+  },
+  "components": [
+    {
+      "component_id": "behavior-primary",
+      "kind": "behavior",
+      "acquisition_system": "Bpod",
+      "role": "goal_experiment",
+      "protocol": "GoalExperiment",
+      "source_channel": null,
+      "asset_ids": ["bpod-mat", "session-summary"],
+      "metadata": {}
+    },
+    {
+      "component_id": "mini2p-primary",
+      "kind": "mini2p_imaging",
+      "acquisition_system": "mini2p2",
+      "role": "neural_imaging",
+      "protocol": null,
+      "source_channel": null,
+      "asset_ids": ["imaging-tiff", "aux-h5"],
+      "metadata": {}
+    },
+    {
+      "component_id": "tracking-primary",
+      "kind": "tracking",
+      "acquisition_system": "Bonsai",
+      "role": "top_camera_tracking",
+      "protocol": null,
+      "source_channel": null,
+      "asset_ids": ["top-video", "tracking-csv"],
+      "metadata": {}
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "bpod-mat",
+      "role": "behavior_session_mat",
+      "relative_path": "scanEXAMPLE_ROS-2335_GoalExperiment.mat",
+      "media_type": "application/x-matlab-data",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    },
+    {
+      "asset_id": "session-summary",
+      "role": "behavior_session_summary",
+      "relative_path": "scanEXAMPLE_ROS-2335_GoalExperiment_SessionSummary.csv",
+      "media_type": "text/csv",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    },
+    {
+      "asset_id": "imaging-tiff",
+      "role": "raw_mini2p_imaging",
+      "relative_path": "scanEXAMPLE_JJ_ROS-2335_00001.tif",
+      "media_type": "image/tiff",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    },
+    {
+      "asset_id": "aux-h5",
+      "role": "wavesurfer_aux",
+      "relative_path": "scanEXAMPLE_aux.h5",
+      "media_type": "application/x-hdf5",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    },
+    {
+      "asset_id": "top-video",
+      "role": "top_tracking_video",
+      "relative_path": "scanEXAMPLE_mini2p2_top_video.mp4",
+      "media_type": "video/mp4",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    },
+    {
+      "asset_id": "tracking-csv",
+      "role": "top_tracking_timestamps",
+      "relative_path": "scanEXAMPLE_mini2p2_top_video_timestamps_tracking.csv",
+      "media_type": "text/csv",
+      "size_bytes": 1,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    }
+  ],
+  "transfer": {
+    "external_copy_record": {
+      "relative_path": "external_copy_status.json",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "reported_status": "DONE",
+    "server_verification": {
+      "status": "pass",
+      "verified_at_utc": "2026-09-10T20:00:00Z",
+      "method": "server inventory plus per-asset SHA-256"
+    }
+  },
+  "qc_review": {
+    "status": "unreviewed",
+    "flags": []
+  },
+  "provenance": {
+    "created_by": "labgraph-acquisition-manifest",
+    "creation_mode": "acquisition_time",
+    "source_folder_name": "JJ_ROS-2335_2026-09-10_scanEXAMPLE_sessEXAMPLE",
+    "supersedes": [],
+    "notes": "Example asset sizes and hashes are placeholders."
+  }
+}

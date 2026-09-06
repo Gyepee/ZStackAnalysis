@@ -1,0 +1,18 @@
+{
+  "analysis_ids": [
+    "median-meanproj__ROS-2338_2026-09-03_scan9G20Y7ZQ__analyzed-20260904__879a27cb"
+  ],
+  "evidence_source": "operator_report",
+  "interpretation": "Possible ambient monitor-light contamination; review before using intensity, background, or cross-session comparisons.",
+  "note": "The operator reported that the monitor may have remained on during acquisition.",
+  "reason_code": "possible_monitor_light_contamination",
+  "recorded_at_utc": "2026-09-04T11:04:37Z",
+  "schema_version": "zstack_analysis.source_review_flag.v1",
+  "source_tiff": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-03_scan9G20Y7ZQ_sess9G20Y7ZQ/scan9G20Y7ZQ_JJ_ROS-2338_00001.tif",
+  "status": "needs_review",
+  "subject": {
+    "animal_id": "ROS-2338",
+    "date": "2026-09-03",
+    "scan_id": "scan9G20Y7ZQ"
+  }
+}

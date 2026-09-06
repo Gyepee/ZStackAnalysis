@@ -1,0 +1,21 @@
+{
+  "schema_version": "labgraph.bench2p_zstack.config.v1",
+  "analysis_state": "exploratory",
+  "aggregation": "mean",
+  "discard_initial_frames_per_slice": 0,
+  "drift_qc_frames": 5,
+  "drift_qc_p95_threshold_px": 3.0,
+  "align_stack_boundary_xy": true,
+  "boundary_upsample_factor": 10,
+  "boundary_overlap_tolerance_um": 0.25,
+  "boundary_max_shift_px": 25.0,
+  "figure_profile": "qc",
+  "display": {
+    "percentile_low": 1.0,
+    "percentile_high": 99.8,
+    "gamma": 0.75,
+    "azimuth_deg": -20.0,
+    "elevation_deg": 28.0
+  },
+  "random_seed": 0
+}

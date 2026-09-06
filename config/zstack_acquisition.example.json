@@ -1,0 +1,16 @@
+{
+  "schema_version": "zstack_analysis.acquisition.v1",
+  "data_kind": "zstack",
+  "acquisition_system": "bench2p",
+  "animal_id": "ROS-0000",
+  "acquisition_date": "2026-09-06",
+  "scan_id": "scanEXAMPLE",
+  "session_id": "sessEXAMPLE",
+  "source_tiff": "scanEXAMPLE_JJ_ROS-0000_00001.tif",
+  "source_channel": 3,
+  "surgery_date": "2026-09-01",
+  "post_surgery_day": 5,
+  "acquisition_purpose": "Longitudinal check of deep FOV recovery before mini2p mounting",
+  "operator_note": null,
+  "known_qc_flags": []
+}

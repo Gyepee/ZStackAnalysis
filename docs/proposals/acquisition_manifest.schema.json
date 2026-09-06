@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gyepee/LabGraph/blob/main/schemas/acquisition_manifest.v1.schema.json",
+  "title": "Proposed LabGraph acquisition folder manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "created_at_utc",
+    "identity",
+    "acquisition_purpose",
+    "temporal_context",
+    "components",
+    "assets",
+    "transfer",
+    "qc_review",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "labgraph.acquisition_manifest.v1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["animal_id", "acquisition_date", "scan_id", "session_id"],
+      "properties": {
+        "animal_id": {"type": "string", "minLength": 1},
+        "acquisition_date": {"type": "string", "format": "date"},
+        "scan_id": {"type": "string", "minLength": 1},
+        "session_id": {"type": "string", "minLength": 1},
+        "operator_id": {"type": ["string", "null"]}
+      }
+    },
+    "acquisition_purpose": {"type": "string", "minLength": 1},
+    "temporal_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surgery_date", "post_surgery_day"],
+      "properties": {
+        "surgery_date": {"type": ["string", "null"], "format": "date"},
+        "post_surgery_day": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["component_id", "kind", "acquisition_system", "asset_ids"],
+        "properties": {
+          "component_id": {"type": "string", "minLength": 1},
+          "kind": {
+            "enum": [
+              "behavior",
+              "mini2p_imaging",
+              "bench2p_zstack",
+              "tracking",
+              "aux",
+              "calibration",
+              "other"
+            ]
+          },
+          "acquisition_system": {"type": "string", "minLength": 1},
+          "role": {"type": ["string", "null"]},
+          "protocol": {"type": ["string", "null"]},
+          "source_channel": {"type": ["integer", "null"], "minimum": 1},
+          "asset_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "metadata": {"type": "object"}
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "asset_id",
+          "role",
+          "relative_path",
+          "media_type",
+          "size_bytes",
+          "sha256"
+        ],
+        "properties": {
+          "asset_id": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "relative_path": {"type": "string", "minLength": 1},
+          "media_type": {"type": "string", "minLength": 1},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "source_locator": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "transfer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_copy_record", "reported_status", "server_verification"],
+      "properties": {
+        "external_copy_record": {
+          "anyOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["relative_path", "sha256"],
+              "properties": {
+                "relative_path": {"const": "external_copy_status.json"},
+                "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+              }
+            }
+          ]
+        },
+        "reported_status": {"enum": ["DONE", "FAILED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE"]},
+        "server_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "verified_at_utc", "method"],
+          "properties": {
+            "status": {"enum": ["pass", "fail", "needs_review", "not_run"]},
+            "verified_at_utc": {"type": ["string", "null"], "format": "date-time"},
+            "method": {"type": ["string", "null"]}
+          }
+        }
+      }
+    },
+    "qc_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "flags"],
+      "properties": {
+        "status": {"enum": ["unreviewed", "pass", "needs_review", "excluded"]},
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reason_code", "status", "record_ref"],
+            "properties": {
+              "reason_code": {"type": "string", "minLength": 1},
+              "status": {"enum": ["open", "resolved", "waived"]},
+              "record_ref": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "creation_mode", "supersedes"],
+      "properties": {
+        "created_by": {"type": "string", "minLength": 1},
+        "creation_mode": {"enum": ["acquisition_time", "backfill"]},
+        "source_folder_name": {"type": "string", "minLength": 1},
+        "supersedes": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

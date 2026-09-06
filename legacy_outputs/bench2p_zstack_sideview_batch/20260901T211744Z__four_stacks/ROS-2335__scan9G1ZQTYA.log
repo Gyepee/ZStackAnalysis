@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/jisooj/Workspace/LabGraph/scripts/render_bench2p_zstack_sideview.py", line 8, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/jisooj/Workspace/LabGraph/src/labgraph_ops/workflows/bench2p_zstack_sideview.py", line 912, in main
+    run_dir = run(args.config, args.output_root, args.input_analysis_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jisooj/Workspace/LabGraph/src/labgraph_ops/workflows/bench2p_zstack_sideview.py", line 698, in run
+    saturation_rows = sample_raw_saturation(
+                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jisooj/Workspace/LabGraph/src/labgraph_ops/workflows/bench2p_zstack_sideview.py", line 312, in sample_raw_saturation
+    raise ValueError("raw_saturation_qc frame index is outside frames_per_slice")
+ValueError: raw_saturation_qc frame index is outside frames_per_slice

@@ -1,0 +1,28 @@
+{
+  "schema_version": "labgraph.bench2p_zstack_single.config.v1",
+  "analysis_state": "exploratory",
+  "aggregation": "mean",
+  "discard_initial_frames_per_slice": 0,
+  "drift_qc_frames": 5,
+  "drift_qc_p95_threshold_px": 3.0,
+  "frame_stability_filter": {
+    "enabled": true,
+    "mad_k": 3.0,
+    "min_keep_fraction": 0.3
+  },
+  "cross_plane_registration": {
+    "enabled": true,
+    "mad_k": 3.0,
+    "max_step_shift_px": 10.0,
+    "upsample_factor": 10
+  },
+  "figure_profile": "qc",
+  "display": {
+    "percentile_low": 1.0,
+    "percentile_high": 99.8,
+    "gamma": 0.75,
+    "azimuth_deg": -20.0,
+    "elevation_deg": 28.0
+  },
+  "random_seed": 0
+}

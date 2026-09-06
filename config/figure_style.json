@@ -1,0 +1,76 @@
+{
+  "schema_version": "labgraph.figure_style.v1",
+  "font": {
+    "family": "Arial",
+    "fallbacks": ["Liberation Sans", "DejaVu Sans"],
+    "svg_fonttype": "none",
+    "pdf_fonttype": 42
+  },
+  "profiles": {
+    "publication": {
+      "font_size_pt": 8,
+      "small_font_size_pt": 7,
+      "panel_label_size_pt": 9,
+      "panel_label_weight": "bold",
+      "axes_linewidth_pt": 0.8,
+      "data_linewidth_pt": 1.2,
+      "emphasis_linewidth_pt": 2.0,
+      "marker_size_pt": 4.5
+    },
+    "qc": {
+      "font_size_pt": 9,
+      "small_font_size_pt": 8,
+      "panel_label_size_pt": 10,
+      "panel_label_weight": "bold",
+      "axes_linewidth_pt": 0.8,
+      "data_linewidth_pt": 1.2,
+      "emphasis_linewidth_pt": 2.0,
+      "marker_size_pt": 4.5
+    },
+    "poster": {
+      "font_size_pt": 18,
+      "small_font_size_pt": 14,
+      "panel_label_size_pt": 18,
+      "panel_label_weight": "bold",
+      "axes_linewidth_pt": 1.2,
+      "data_linewidth_pt": 2.0,
+      "emphasis_linewidth_pt": 3.0,
+      "marker_size_pt": 6.0
+    }
+  },
+  "capitalization": {
+    "ordinary_figure_text": "lowercase_initial_where_grammar_permits",
+    "panel_labels": "lowercase",
+    "preserve": ["animal_ids", "proper_nouns", "named_methods", "mathematical_variables", "standard_abbreviations", "units"]
+  },
+  "axes": {
+    "background": "white",
+    "show_top_spine": false,
+    "show_right_spine": false,
+    "tick_direction": "out",
+    "default_grid": false,
+    "zero_baseline_policy": "conditional_by_visual_encoding"
+  },
+  "palette": {
+    "blue": "#0072B2",
+    "orange": "#E69F00",
+    "green": "#009E73",
+    "vermillion": "#D55E00",
+    "purple": "#CC79A7",
+    "sky_blue": "#56B4E9",
+    "yellow": "#F0E442",
+    "black": "#000000",
+    "gray": "#7A7A7A"
+  },
+  "output": {
+    "editable_vector_formats": ["svg"],
+    "review_format": "png",
+    "png_dpi": 300,
+    "maximum_canvas_mm": {"width": 180, "height": 215},
+    "preserve_raster_native_resolution": true,
+    "keep_individual_publication_panels": true,
+    "require_plotted_data_table": true,
+    "require_figure_json": true,
+    "require_figure_markdown": true
+  }
+}

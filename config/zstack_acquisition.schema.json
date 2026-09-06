@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gyepee/ZStackAnalysis/blob/main/config/zstack_acquisition.schema.json",
+  "title": "ZStackAnalysis acquisition declaration",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "data_kind",
+    "acquisition_system",
+    "animal_id",
+    "acquisition_date",
+    "scan_id",
+    "session_id",
+    "source_tiff",
+    "acquisition_purpose"
+  ],
+  "properties": {
+    "schema_version": {"const": "zstack_analysis.acquisition.v1"},
+    "data_kind": {"const": "zstack"},
+    "acquisition_system": {"const": "bench2p"},
+    "animal_id": {"type": "string", "minLength": 1},
+    "acquisition_date": {"type": "string", "format": "date"},
+    "scan_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "source_tiff": {"type": "string", "minLength": 1},
+    "source_channel": {"type": ["integer", "null"], "minimum": 1},
+    "surgery_date": {"type": ["string", "null"], "format": "date"},
+    "post_surgery_day": {"type": ["integer", "null"], "minimum": 0},
+    "acquisition_purpose": {"type": "string", "minLength": 1},
+    "operator_note": {"type": ["string", "null"]},
+    "known_qc_flags": {"type": "array", "items": {"type": "string"}}
+  }
+}

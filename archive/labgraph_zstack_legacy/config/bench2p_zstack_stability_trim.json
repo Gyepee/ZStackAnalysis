@@ -1,0 +1,8 @@
+{
+  "schema_version": "labgraph.bench2p_zstack_stability_trim.config.v1",
+  "analysis_state": "exploratory",
+  "drift_metric_field": "early_to_late_shift_magnitude_px",
+  "threshold_px": 3.0,
+  "trim_direction": "drop_leading_until_stable",
+  "random_seed": 0
+}

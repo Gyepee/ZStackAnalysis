@@ -1,0 +1,78 @@
+{
+  "schema_version": "zstack_analysis.analysis_spec.v1",
+  "spec_id": "mini2p_fov_recovery_longitudinal.v1",
+  "title": "Longitudinal recovery of the candidate mini2p field of view",
+  "analysis_state": "exploratory",
+  "pipeline": {
+    "id": "zstack_median_projection",
+    "version": "0.1.0",
+    "stage": "initial_development"
+  },
+  "scientific_context": "Blood and acute optical disturbance can obscure the field of view on the surgery day. Repeated Z-stacks are used to describe how visible tissue and cells extend into deeper planes during recovery before mini2p mounting and later LabGraph experiments.",
+  "primary_question": "At which post-surgery time point is the candidate field of view sufficiently recovered, including at depth, to support selection of an optimal mini2p mounting location?",
+  "analysis_units": {
+    "reconstruction_unit": "one physical Z-stack acquisition, one saved ScanImage channel",
+    "longitudinal_biological_unit": "animal",
+    "repeated_measurement_unit": "animal-day scan nested within animal",
+    "technical_observations": [
+      "Z plane nested within scan",
+      "frame nested within Z plane"
+    ],
+    "independence_rule": "Frames and planes are technical observations and must never be counted as independent biological replicates."
+  },
+  "longitudinal_design": {
+    "index_event": "surgery_date",
+    "time_variable": "post_surgery_day",
+    "comparison_order": "within-animal trajectory first, animal-balanced summary second",
+    "same_animal_requirement": true
+  },
+  "input_boundary": {
+    "kind": "raw_scanimage_tiff",
+    "purpose": "The pipeline reconstructs the Z-stack itself; raw ScanImage pages and metadata are therefore the required primary input rather than a fallback QC input.",
+    "discovery_contract": "Browse and resolve data through ResearchDataGovernance or the current LabGraph data-access contract before execution.",
+    "write_policy": "Source TIFFs are read-only and are never modified."
+  },
+  "eligibility": {
+    "reconstruction_required": [
+      "Bench2p stack acquisition is enabled",
+      "saved channel is unambiguous or explicitly selected",
+      "TIFF page count matches ScanImage metadata",
+      "Z positions are strictly increasing and match the declared step"
+    ],
+    "longitudinal_comparison_required": [
+      "surgery date is known",
+      "animal, acquisition date, scan ID, session ID, and source channel are present",
+      "reconstruction QC passes",
+      "source review flags affecting intensity, background, or depth visibility are resolved or explicitly stratified"
+    ],
+    "exclusion_policy": "Never silently drop a failed, missing, duplicate, or flagged acquisition; record its disposition and reason."
+  },
+  "missing_data_policy": "Represent missing days and unavailable surgery dates explicitly. Do not interpolate an unobserved day or treat irregularly sampled days as equally spaced replicates.",
+  "statistical_method": "Version 0.1.0 performs deterministic per-scan reconstruction and descriptive QC only; it does not estimate an optimal post-surgery day.",
+  "planned_outcomes": [
+    "deepest usable visible plane or contiguous usable depth",
+    "depth-resolved cell or structure visibility",
+    "depth-resolved signal-to-background and contrast",
+    "within-animal change across post-surgery days",
+    "mounting-readiness decision with explicit QC evidence"
+  ],
+  "supported_interpretations": [
+    "The run reconstructs and displays one declared scan and channel under versioned settings.",
+    "Descriptive metadata and QC can identify scans that are suitable for later longitudinal comparison."
+  ],
+  "unsupported_interpretations": [
+    "The current reconstruction alone identifies the optimal mounting day.",
+    "Median aggregation is axial-motion correction.",
+    "Brightness differences alone prove biological recovery.",
+    "Frames or planes are independent biological replicates."
+  ],
+  "governance": {
+    "authority": "LabGraph",
+    "contracts": [
+      "docs/ANALYSIS_GUIDELINES.md",
+      "docs/FIGURE_GUIDELINES.md",
+      "docs/DATA_FOLDER_ACCESS.md"
+    ],
+    "local_adoption_note": "ZStackAnalysis owns its runtime code and frozen configuration while adopting the LabGraph run and figure contracts."
+  }
+}

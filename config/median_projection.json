@@ -1,0 +1,32 @@
+{
+  "schema_version": "zstack_analysis.median_projection.config.v1",
+  "analysis_state": "exploratory",
+  "analysis_title": "median-meanproj",
+  "aggregation": {
+    "method": "pixelwise_median_all_usable_frames",
+    "discard_initial_frames_per_plane": 0
+  },
+  "within_plane_qc": {
+    "correlation_stride_px": 4,
+    "descriptive_low_correlation_mad_k": 3.0
+  },
+  "metadata_qc": {
+    "z_spacing_absolute_tolerance_um": 0.000001,
+    "require_increasing_z": true
+  },
+  "display": {
+    "low_percentile": 1.0,
+    "high_percentile": 99.8,
+    "gamma": 0.75
+  },
+  "projection": {
+    "primary": "mean",
+    "comparison": "maximum",
+    "representative_z_fraction": 0.5
+  },
+  "figure": {
+    "style_profile": "qc",
+    "cmap": "gray"
+  },
+  "random_seed": 0
+}

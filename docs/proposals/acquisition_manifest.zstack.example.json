@@ -1,0 +1,60 @@
+{
+  "schema_version": "labgraph.acquisition_manifest.v1",
+  "manifest_id": "acq__ROS-2335_2026-09-01_scanEXAMPLE_sessEXAMPLE",
+  "created_at_utc": "2026-09-06T12:00:00Z",
+  "identity": {
+    "animal_id": "ROS-2335",
+    "acquisition_date": "2026-09-01",
+    "scan_id": "scanEXAMPLE",
+    "session_id": "sessEXAMPLE",
+    "operator_id": "JJ"
+  },
+  "acquisition_purpose": "Deep FOV recovery check before mini2p mounting",
+  "temporal_context": {
+    "surgery_date": "2026-08-28",
+    "post_surgery_day": 4
+  },
+  "components": [
+    {
+      "component_id": "bench2p-zstack-primary",
+      "kind": "bench2p_zstack",
+      "acquisition_system": "bench2p",
+      "role": "pre_mount_fov_recovery",
+      "protocol": "sequential_zstack",
+      "source_channel": 3,
+      "asset_ids": ["raw-zstack-tiff"],
+      "metadata": {}
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "raw-zstack-tiff",
+      "role": "raw_scanimage_tiff",
+      "relative_path": "scanEXAMPLE_JJ_ROS-2335_00001.tif",
+      "media_type": "image/tiff",
+      "size_bytes": 123456789,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "source_locator": null
+    }
+  ],
+  "transfer": {
+    "external_copy_record": null,
+    "reported_status": "NOT_APPLICABLE",
+    "server_verification": {
+      "status": "pass",
+      "verified_at_utc": "2026-09-06T12:00:00Z",
+      "method": "server inventory plus SHA-256"
+    }
+  },
+  "qc_review": {
+    "status": "unreviewed",
+    "flags": []
+  },
+  "provenance": {
+    "created_by": "labgraph-acquisition-manifest",
+    "creation_mode": "backfill",
+    "source_folder_name": "JJ_ROS-2335_2026-09-01_scanEXAMPLE_sessEXAMPLE",
+    "supersedes": [],
+    "notes": "Example values and hash are placeholders."
+  }
+}

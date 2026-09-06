@@ -1,0 +1,75 @@
+{
+  "schema_version": "labgraph.bench2p_zstack_xy_registration.config.v1",
+  "analysis_state": "exploratory",
+  "scope_statement": "within-plane 2D registration only; no axial-motion correction",
+  "discard_initial_frames_per_slice": 0,
+  "methods": [
+    "A_unregistered_all_mean",
+    "B_legacy_correlation_filtered_unregistered_mean",
+    "C_xy_registered_all_mean",
+    "D_xy_registered_quality_filtered_mean"
+  ],
+  "legacy_filter": {
+    "correlation_mad_k": 3.0,
+    "min_keep_fraction": 0.3
+  },
+  "registration": {
+    "initial_reference": "pixelwise_median",
+    "reference_updates": 1,
+    "upsample_factor": 10,
+    "normalization": null,
+    "gaussian_sigma_px": 1.0,
+    "crop_border_px": 32,
+    "remove_median_and_scale_mad": true,
+    "hann_window": true,
+    "interpolation_order": 1,
+    "max_shift_px": 8.0
+  },
+  "post_registration_quality": {
+    "correlation_mad_k": 3.0,
+    "registration_error_mad_k": 4.0,
+    "minimum_correlation": null,
+    "maximum_registration_error": null,
+    "minimum_correlation_gain": -0.02,
+    "min_keep_fraction": 0.3
+  },
+  "metadata_qc": {
+    "z_spacing_absolute_tolerance_um": 1e-6,
+    "require_increasing_z": true
+  },
+  "saturation_qc": {
+    "normalized_frame_positions_per_slice": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "upper_tail_percentile": 99.9,
+    "plateau_mode_fraction_review_threshold": 0.2
+  },
+  "volume_metrics": {
+    "z_correlation_max_lag_planes": 10,
+    "thin_slab_thickness_um": 6.0,
+    "representative_z_fraction": 0.5,
+    "representative_y_fraction": 0.5,
+    "representative_x_fraction": 0.5
+  },
+  "display": {
+    "reference_method": "A_unregistered_all_mean",
+    "percentile_low": 1.0,
+    "percentile_high": 99.8,
+    "gamma": 0.75
+  },
+  "repeat_comparison": {
+    "target_spacing_um": 2.0,
+    "registration_upsample_factor": 10,
+    "max_3d_shift_um": 40.0,
+    "landmark_count": 30,
+    "landmark_min_distance_um": 12.0,
+    "landmark_match_radius_um": 20.0
+  },
+  "figure_profile": "qc",
+  "figure_style_source": "config/figure_style.json",
+  "random_seed": 0
+}
