@@ -1,10 +1,10 @@
 {
-  "schema_version": "zstack_analysis.median_projection.config.v1",
+  "schema_version": "zstack_analysis.median_projection.config.v2",
   "analysis_state": "exploratory",
   "analysis_title": "median-meanproj",
   "aggregation": {
     "method": "pixelwise_median_all_usable_frames",
-    "discard_initial_frames_per_plane": 0
+    "discard_initial_stored_images_per_plane": 0
   },
   "within_plane_qc": {
     "correlation_stride_px": 4,

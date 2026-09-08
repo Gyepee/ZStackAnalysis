@@ -31,6 +31,10 @@ def _metadata(source: Path) -> SimpleNamespace:
         session_id="sessABC",
         n_slices=3,
         frames_per_slice=4,
+        stored_frames_per_slice=4,
+        log_average_factor=1,
+        log_average_disable_divide=False,
+        storage_aggregation="raw_frame",
         width_px=8,
         height_px=6,
         pixel_size_x_um=1.0,
@@ -44,7 +48,7 @@ def _metadata(source: Path) -> SimpleNamespace:
 
 def test_pipeline_identity_is_fixed_to_initial_development_version() -> None:
     assert PIPELINE_ID == "zstack_median_projection"
-    assert PIPELINE_VERSION == "0.1.0"
+    assert PIPELINE_VERSION == "0.2.0"
     assert PIPELINE_STAGE == "initial_development"
 
 
@@ -104,7 +108,7 @@ def test_analysis_id_and_table_rows_carry_stable_identity() -> None:
         created_at,
         {"source_sha256": "abc", "config_sha256": "def"},
     )
-    assert "zstack_median_projection-v0-1-0" in analysis_id
+    assert "zstack_median_projection-v0-2-0" in analysis_id
     assert "ROS-2335_2026-09-01_scanABC_sessABC_ch3" in analysis_id
     rows = attach_identity(
         [{"plane_index": 0}],

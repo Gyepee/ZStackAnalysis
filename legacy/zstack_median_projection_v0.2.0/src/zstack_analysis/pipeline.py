@@ -35,7 +35,10 @@ DEFAULT_CONFIG = PROJECT_ROOT / "config" / "median_projection.json"
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "analysis_runs"
 DEFAULT_FAILED_ROOT = PROJECT_ROOT / "failed_runs"
 DEFAULT_ANALYSIS_TITLE = "median-meanproj"
-METHOD_STATEMENT = "per-plane pixelwise median; no frame registration or rejection"
+METHOD_STATEMENT = (
+    "per-plane pixelwise median across stored TIFF samples; stored samples preserve "
+    "ScanImage file aggregation; no post hoc frame registration or rejection"
+)
 MOTION_STATEMENT = "no axial-motion correction"
 
 
@@ -190,14 +193,14 @@ def resolve_source_channel(
 
 
 def source_page_index(
-    acquisition_frame_index: int, channel_position: int, channel_count: int
+    stored_frame_index: int, channel_position: int, channel_count: int
 ) -> int:
     """Map ScanImage's ZTC ordering to the physical TIFF page index."""
-    if acquisition_frame_index < 0:
-        raise ValueError("acquisition_frame_index must be non-negative")
+    if stored_frame_index < 0:
+        raise ValueError("stored_frame_index must be non-negative")
     if channel_count < 1 or not 0 <= channel_position < channel_count:
         raise ValueError("Invalid channel position or channel count")
-    return acquisition_frame_index * channel_count + channel_position
+    return stored_frame_index * channel_count + channel_position
 
 
 def median_plane(frames: np.ndarray) -> np.ndarray:
@@ -249,9 +252,9 @@ def reconstruct_median_volume(
     source_channel: int,
     channel_position: int,
 ) -> tuple[np.ndarray, list[dict[str, Any]], list[dict[str, Any]], int]:
-    discard = int(config["aggregation"]["discard_initial_frames_per_plane"])
-    if not 0 <= discard < metadata.frames_per_slice:
-        raise ValueError("discard_initial_frames_per_plane is outside the plane")
+    discard = int(config["aggregation"]["discard_initial_stored_images_per_plane"])
+    if not 0 <= discard < metadata.stored_frames_per_slice:
+        raise ValueError("discard_initial_stored_images_per_plane is outside the plane")
     stride = int(config["within_plane_qc"]["correlation_stride_px"])
     mad_k = float(config["within_plane_qc"]["descriptive_low_correlation_mad_k"])
     volume = np.empty(
@@ -268,15 +271,16 @@ def reconstruct_median_volume(
                 f"expect {metadata.expected_tiff_pages}"
             )
         buffer = np.empty(
-            (metadata.frames_per_slice, metadata.height_px, metadata.width_px),
+            (metadata.stored_frames_per_slice, metadata.height_px, metadata.width_px),
             dtype=tif.pages[channel_position].dtype,
         )
         for plane_index in range(metadata.n_slices):
+            first_stored_frame = plane_index * metadata.stored_frames_per_slice
             first_acquisition_frame = plane_index * metadata.frames_per_slice
-            for local_index in range(metadata.frames_per_slice):
-                acquisition_frame_index = first_acquisition_frame + local_index
+            for local_index in range(metadata.stored_frames_per_slice):
+                stored_frame_index = first_stored_frame + local_index
                 page_index = source_page_index(
-                    acquisition_frame_index, channel_position, channel_count
+                    stored_frame_index, channel_position, channel_count
                 )
                 buffer[local_index] = tif.pages[page_index].asarray()
             usable = buffer[discard:]
@@ -294,20 +298,30 @@ def reconstruct_median_volume(
             z_relative = z_scanimage - float(metadata.z_positions_um[0])
             for usable_index, correlation in enumerate(correlations):
                 local_index = usable_index + discard
-                acquisition_frame_index = first_acquisition_frame + local_index
+                stored_frame_index = first_stored_frame + local_index
+                acquisition_frame_start_index = (
+                    first_acquisition_frame + local_index * metadata.log_average_factor
+                )
+                acquisition_frame_end_index = (
+                    acquisition_frame_start_index + metadata.log_average_factor - 1
+                )
                 page_index = source_page_index(
-                    acquisition_frame_index, channel_position, channel_count
+                    stored_frame_index, channel_position, channel_count
                 )
                 frame_rows.append(
                     {
                         "plane_index": plane_index,
                         "z_relative_um": z_relative,
                         "z_scanimage_um": z_scanimage,
-                        "local_frame_index": local_index,
+                        "local_stored_image_index": local_index,
+                        "acquisition_frame_start_index": acquisition_frame_start_index,
+                        "acquisition_frame_end_index": acquisition_frame_end_index,
+                        "acquired_frames_represented": metadata.log_average_factor,
+                        "source_storage_aggregation": metadata.storage_aggregation,
                         "source_channel": source_channel,
                         "source_page_index": page_index,
                         "frame_time_s": float(
-                            acquisition_frame_index / metadata.frame_rate_hz
+                            acquisition_frame_start_index / metadata.frame_rate_hz
                         ),
                         "frame_to_plane_median_correlation": float(correlation),
                         "frame_mean_intensity": float(frame_means[usable_index]),
@@ -322,9 +336,12 @@ def reconstruct_median_volume(
                     "plane_index": plane_index,
                     "z_relative_um": z_relative,
                     "z_scanimage_um": z_scanimage,
-                    "frames_total": int(metadata.frames_per_slice),
-                    "frames_used_in_median": int(usable.shape[0]),
-                    "frames_rejected": 0,
+                    "acquired_frames_total": int(metadata.frames_per_slice),
+                    "stored_images_total": int(metadata.stored_frames_per_slice),
+                    "stored_images_used_in_median": int(usable.shape[0]),
+                    "stored_images_rejected": 0,
+                    "log_average_factor": int(metadata.log_average_factor),
+                    "source_storage_aggregation": metadata.storage_aggregation,
                     "frame_to_median_correlation_min": float(
                         np.nanmin(correlations)
                     ),
@@ -358,7 +375,7 @@ def reconstruct_median_volume(
             )
             if (plane_index + 1) % 10 == 0 or plane_index == 0:
                 print(
-                    f"[{metadata.scan_id}] median plane {plane_index + 1}/{metadata.n_slices}",
+                    f"[{metadata.scan_id}] reconstructed plane {plane_index + 1}/{metadata.n_slices}",
                     flush=True,
                 )
     return volume, frame_rows, plane_rows, page_count
@@ -450,7 +467,7 @@ def save_projection_outputs(
             axes[row_index, col_index].set_xlabel("µm")
             axes[row_index, col_index].set_ylabel("µm")
     figure.suptitle(
-        f"{metadata.scan_id}: median-per-plane volume; mean vs maximum projections"
+        f"{metadata.scan_id}: stored-sample-median volume; mean vs maximum projections"
     )
     projection_path = run_dir / "figures" / "fig_mean_vs_max_projections.png"
     figure.savefig(
@@ -483,7 +500,7 @@ def save_projection_outputs(
         axis.set_xlabel("µm")
         axis.set_ylabel("µm")
     figure.suptitle(
-        f"{metadata.scan_id}: mean projections of the median-per-plane volume"
+        f"{metadata.scan_id}: mean projections of the stored-sample-median volume"
     )
     figure.savefig(
         run_dir / "figures" / "fig_mean_projections.png",

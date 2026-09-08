@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zstack-analysis"
-version = "0.1.0"
+version = "0.2.0"
 description = "Focused ScanImage Z-stack reconstruction and projection QC"
 requires-python = ">=3.11"
 dependencies = ["numpy", "scipy", "matplotlib", "tifffile", "scikit-image"]

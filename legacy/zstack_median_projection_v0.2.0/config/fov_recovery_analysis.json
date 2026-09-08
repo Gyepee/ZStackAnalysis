@@ -5,7 +5,7 @@
   "analysis_state": "exploratory",
   "pipeline": {
     "id": "zstack_median_projection",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "stage": "initial_development"
   },
   "scientific_context": "Blood and acute optical disturbance can obscure the field of view on the surgery day. Repeated Z-stacks are used to describe how visible tissue and cells extend into deeper planes during recovery before mini2p mounting and later LabGraph experiments.",
@@ -48,7 +48,7 @@
     "exclusion_policy": "Never silently drop a failed, missing, duplicate, or flagged acquisition; record its disposition and reason."
   },
   "missing_data_policy": "Represent missing days and unavailable surgery dates explicitly. Do not interpolate an unobserved day or treat irregularly sampled days as equally spaced replicates.",
-  "statistical_method": "Version 0.1.0 performs deterministic per-scan reconstruction and descriptive QC only; it does not estimate an optimal post-surgery day.",
+  "statistical_method": "Version 0.2.0 performs deterministic per-scan reconstruction and descriptive QC only; it does not estimate an optimal post-surgery day.",
   "planned_outcomes": [
     "deepest usable visible plane or contiguous usable depth",
     "depth-resolved cell or structure visibility",

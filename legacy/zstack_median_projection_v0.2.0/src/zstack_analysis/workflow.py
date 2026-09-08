@@ -17,6 +17,7 @@ from typing import Any, Sequence
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .collection_manifest import resolve_collection_manifest
 from .pipeline import (
     METHOD_STATEMENT,
     MOTION_STATEMENT,
@@ -367,7 +368,9 @@ def _metadata_lines(
     )
     second = (
         f"{PIPELINE_ID} v{PIPELINE_VERSION} ({PIPELINE_STAGE}) | "
-        f"{metadata.n_slices} planes × {metadata.frames_per_slice} frames | "
+        f"{metadata.n_slices} planes | {metadata.frames_per_slice} acquired/plane → "
+        f"{metadata.stored_frames_per_slice} stored/plane "
+        f"({metadata.storage_aggregation}, #Avg={metadata.log_average_factor}) | "
         f"Δz {metadata.z_step_um:g} µm | {review_status} | run {analysis_id[-8:]}"
     )
     return first, second
@@ -475,7 +478,7 @@ def save_projection_figures(
                 {
                     "panel": chr(ord("a") + len(panels)),
                     "array_key": key,
-                    "computation": f"{prefix} across {suffix.rsplit('_', 1)[-1]} of the median-per-plane volume",
+                    "computation": f"{prefix} across {suffix.rsplit('_', 1)[-1]} of the stored-sample-median volume",
                     "variables": ["fluorescence intensity", "physical position"],
                     "sample_unit": "one Z-stack acquisition and channel",
                     "n": 1,
@@ -491,7 +494,7 @@ def save_projection_figures(
     descriptors.append(
         {
             "figure_id": "fig_mean_vs_max_projections",
-            "title": "Mean and maximum projections of the median-per-plane volume",
+            "title": "Mean and maximum projections of the stored-sample-median volume",
             "paths": paths,
             "array_keys": [panel["array_key"] for panel in panels],
             "panels": panels,
@@ -519,7 +522,7 @@ def save_projection_figures(
             {
                 "panel": chr(ord("a") + len(panels)),
                 "array_key": key,
-                "computation": f"mean across {suffix.rsplit('_', 1)[-1]} of the median-per-plane volume",
+                "computation": f"mean across {suffix.rsplit('_', 1)[-1]} of the stored-sample-median volume",
                 "variables": ["mean fluorescence intensity", "physical position"],
                 "sample_unit": "one Z-stack acquisition and channel",
                 "n": 1,
@@ -535,7 +538,7 @@ def save_projection_figures(
     descriptors.append(
         {
             "figure_id": "fig_mean_projections",
-            "title": "Mean projections of the median-per-plane volume",
+            "title": "Mean projections of the stored-sample-median volume",
             "paths": paths,
             "array_keys": [panel["array_key"] for panel in panels],
             "panels": panels,
@@ -578,11 +581,14 @@ def save_projection_figures(
                 {
                     "panel": "a",
                     "array_key": "representative_median_plane",
-                    "computation": f"pixelwise median of all usable frames at plane {representative_index}",
+                    "computation": f"pixelwise median of all usable stored images at plane {representative_index}",
                     "variables": ["fluorescence intensity", "X", "Y"],
                     "sample_unit": "one Z-stack acquisition and channel",
                     "n": 1,
-                    "technical_frame_count": int(metadata.frames_per_slice),
+                    "acquired_frames_per_plane": int(metadata.frames_per_slice),
+                    "stored_images_per_plane": int(metadata.stored_frames_per_slice),
+                    "log_average_factor": int(metadata.log_average_factor),
+                    "source_storage_aggregation": metadata.storage_aggregation,
                 }
             ],
             "display_range": {"low": float(low), "high": float(high), "gamma": gamma},
@@ -594,7 +600,7 @@ def save_projection_figures(
         {
             "projection": name,
             "aggregation_axis": name.rsplit("_", 1)[-1],
-            "source_dtype": "float32 median volume",
+            "source_dtype": "float32 stored-sample-median volume",
             "minimum": float(np.nanmin(array)),
             "mean": float(np.nanmean(array)),
             "maximum": float(np.nanmax(array)),
@@ -682,6 +688,13 @@ def write_figure_bundles(
                 "session_id": metadata.session_id,
                 "source_channel": source_channel,
             },
+            "input_representation": {
+                "acquired_frames_per_plane": metadata.frames_per_slice,
+                "stored_images_per_plane": metadata.stored_frames_per_slice,
+                "log_average_factor": metadata.log_average_factor,
+                "storage_aggregation": metadata.storage_aggregation,
+                "individual_raw_frames_available": metadata.log_average_factor == 1,
+            },
             "generating_script": script,
             "git": git_state,
             "configs": {
@@ -723,7 +736,10 @@ def write_figure_bundles(
                 "pipeline_version",
                 "pipeline_stage",
                 "plane_count",
-                "frames_per_plane",
+                "acquired_frames_per_plane",
+                "stored_images_per_plane",
+                "log_average_factor",
+                "storage_aggregation",
                 "z_step_um",
                 "review_status",
                 "analysis_id_suffix",
@@ -745,7 +761,10 @@ def write_figure_bundles(
 
 This figure was generated from `{plot_data['path']}` using array keys
 `{', '.join(descriptor['array_keys'])}`. Each panel is described in
-`{figure_id}.json`. The reconstruction method is: {METHOD_STATEMENT}.
+`{figure_id}.json`. The reconstruction method is: {METHOD_STATEMENT}. The TIFF stores
+{metadata.stored_frames_per_slice} image(s) per plane as `{metadata.storage_aggregation}`
+with ScanImage `#Avg={metadata.log_average_factor}` from
+{metadata.frames_per_slice} acquired frame(s) per plane.
 
 ## Sample unit and n
 
@@ -818,6 +837,9 @@ def run_readme(
 - Reconstruction QC: `pass`
 - Longitudinal comparison: `{eligibility['longitudinal_comparison']['status']}`
 - Source review flags: `{len(review_flags)}`
+- TIFF storage: `{metadata.frames_per_slice}` acquired frames/plane →
+  `{metadata.stored_frames_per_slice}` stored image(s)/plane;
+  `{metadata.storage_aggregation}`, ScanImage `#Avg={metadata.log_average_factor}`
 
 ## Question
 
@@ -831,7 +853,8 @@ nested within animal, and frames/planes are technical observations.
 
 ## Method and interpretation boundary
 
-{METHOD_STATEMENT}. {MOTION_STATEMENT}. This initial-development run is descriptive
+{METHOD_STATEMENT}. {MOTION_STATEMENT}. Individual acquired frames available in the
+TIFF: `{metadata.log_average_factor == 1}`. This initial-development run is descriptive
 and does not estimate the optimal mounting day.
 
 ## Reproduce
@@ -872,6 +895,7 @@ def build_run(
     configure_matplotlib(style, profile_name)
 
     metadata = parse_stack_metadata(source_tiff)
+    metadata, collection_context = resolve_collection_manifest(source_tiff, metadata)
     if metadata.setup != "bench2p" or not metadata.stack_enabled:
         raise ValueError("Input is not an enabled Bench2p ScanImage stack")
     acquisition_context = resolve_acquisition_context(
@@ -920,6 +944,7 @@ def build_run(
         "analysis_spec_sha256": sha256_file(analysis_spec_path),
         "figure_style_sha256": sha256_file(figure_style_path),
         "acquisition_spec_sha256": acquisition_context["sha256"],
+        "collection_manifest_sha256": collection_context["sha256"],
     }
     analysis_id = create_analysis_id(
         metadata, source_channel, created_at, digest_payload
@@ -963,11 +988,11 @@ def build_run(
             z_step_um=metadata.z_step_um,
         )
         write_rows(
-            incomplete_dir / "tables" / "frame_to_median_qc.csv",
+            incomplete_dir / "tables" / "stored_sample_to_median_qc.csv",
             attach_identity(frame_rows, identity),
         )
         write_rows(
-            incomplete_dir / "tables" / "plane_median_qc.csv",
+            incomplete_dir / "tables" / "plane_reconstruction_qc.csv",
             attach_identity(plane_rows, identity),
         )
         write_rows(
@@ -994,6 +1019,14 @@ def build_run(
             "overall_status": "needs_review" if review_flags else "pass",
             "method_statement": METHOD_STATEMENT,
             "motion_statement": MOTION_STATEMENT,
+            "input_representation": {
+                "acquired_frames_per_plane": metadata.frames_per_slice,
+                "stored_images_per_plane": metadata.stored_frames_per_slice,
+                "log_average_factor": metadata.log_average_factor,
+                "log_average_disable_divide": metadata.log_average_disable_divide,
+                "storage_aggregation": metadata.storage_aggregation,
+                "individual_raw_frames_available": metadata.log_average_factor == 1,
+            },
             "z_geometry": z_qc,
             "page_grouping": grouping_qc,
             "page_count": {
@@ -1009,7 +1042,10 @@ def build_run(
             },
             "source_review_flags": review_flags,
             "interpretation_limit": (
-                "Median aggregation is robust to a minority of transient outlier "
+                "Only ScanImage logged averages are stored; individual acquired frames "
+                "cannot be recovered or assessed for within-plane motion."
+                if metadata.log_average_factor > 1
+                else "Median aggregation is robust to a minority of transient outlier "
                 "frames but is not motion correction and cannot establish axial stability."
             ),
         }
@@ -1029,6 +1065,7 @@ def build_run(
             "analysis_config": config,
             "figure_style": style,
             "acquisition_declaration": acquisition_context,
+            "collection_manifest": collection_context,
             "authoritative_source_tiff": str(source_tiff),
             "local_read_copy_used": read_copy is not None,
             "selected_source_channel": source_channel,
@@ -1048,10 +1085,12 @@ def build_run(
                 "analysis_spec": "pass",
                 "figure_style": "pass",
                 "acquisition_declaration": acquisition_context["status"],
+                "collection_manifest": collection_context["status"],
                 "source_identity": "pass",
                 "source_hash": "pass",
                 "read_copy_hash": "not_applicable" if read_copy is None else "pass",
                 "metadata_gates": "pass",
+                "storage_layout": "pass",
                 "review_flag_count": len(review_flags),
             },
         )
@@ -1090,6 +1129,7 @@ def build_run(
             PROJECT_ROOT / "src" / "zstack_analysis" / "workflow.py",
             PROJECT_ROOT / "src" / "zstack_analysis" / "pipeline.py",
             PROJECT_ROOT / "src" / "zstack_analysis" / "scanimage_io.py",
+            PROJECT_ROOT / "src" / "zstack_analysis" / "collection_manifest.py",
             PROJECT_ROOT / "src" / "zstack_analysis" / "version.py",
             ENTRY_SCRIPT,
         )
@@ -1113,6 +1153,7 @@ def build_run(
             "identity": identity,
             "input_boundary": analysis_spec["input_boundary"],
             "inputs": {
+                "collection_manifest": collection_context,
                 "raw_scanimage_tiff": {
                     "asset_id": (
                         f"{metadata.animal_id}/{metadata.date}/{metadata.scan_id}/"
@@ -1126,6 +1167,12 @@ def build_run(
                     "read_only": True,
                     "saved_channels": list(metadata.saved_channels),
                     "selected_channel": source_channel,
+                    "acquired_frames_per_plane": metadata.frames_per_slice,
+                    "stored_images_per_plane": metadata.stored_frames_per_slice,
+                    "log_average_factor": metadata.log_average_factor,
+                    "log_average_disable_divide": metadata.log_average_disable_divide,
+                    "storage_aggregation": metadata.storage_aggregation,
+                    "individual_raw_frames_available": metadata.log_average_factor == 1,
                 },
                 "local_read_copy": None
                 if read_copy is None
@@ -1197,6 +1244,7 @@ def build_run(
                     "page_count": "pass",
                     "source_channel": "pass",
                     "acquisition_declaration": acquisition_context["status"],
+                    "collection_manifest": collection_context["status"],
                 },
             },
             "outputs": [

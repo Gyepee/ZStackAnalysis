@@ -1,0 +1,124 @@
+{
+  "schema_version": "zstack_analysis.collection_manifest_correction.v1",
+  "recorded_at_utc": "2026-09-08T10:50:19.429813+00:00",
+  "evidence_source": "operator_report_and_filesystem_reconciliation",
+  "acquisition_date": "2026-09-08",
+  "operator_boundary": "after 2026-09-08 11:53 Europe/Berlin",
+  "animal_id_correction": {
+    "from": "ROS-2338",
+    "to": "ROS-2335"
+  },
+  "scope_note": "Collection manifests were corrected. Session directory names, TIFF file names, TIFF binary content, and embedded acquisition metadata retain the acquisition-time ROS-2338 label and require this correction record when read.",
+  "sessions": [
+    {
+      "scan_id": "scan9G23WFYJ",
+      "session_timestamp": "2026-09-08 11:29:55.500",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WFYJ_sess9G23WFYJ/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2338",
+      "present_tiff_name": "scan9G23WFYJ_JJ_ROS-2338_02027.tif",
+      "present_tiff_size": 3160148750,
+      "removed_stale_entries": [
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00001.tif",
+          "bytes": 925850
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00002.tif",
+          "bytes": 18032528.0
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00003.tif",
+          "bytes": 105455274.0
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00004.tif",
+          "bytes": 13756378.0
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00006.tif",
+          "bytes": 386016
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00007.tif",
+          "bytes": 13813144.0
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00008.tif",
+          "bytes": 8018574.0
+        },
+        {
+          "name": "scan9G23WFYJ_JJ_ROS-2338_00009.tif",
+          "bytes": 52784972.0
+        }
+      ],
+      "manifest_sha256_before": "1536a74fa3723f1021121053bde63e59f55e9e6b398ac9d75e8d00b3c617c219",
+      "manifest_sha256_after": "813d69877e98831ae59eb014b09991e881b72d7d6d1e4abfd13d28611b101e96"
+    },
+    {
+      "scan_id": "scan9G23WITP",
+      "session_timestamp": "2026-09-08 11:35:16.430",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WITP_sess9G23WITP/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2338",
+      "present_tiff_name": "scan9G23WITP_JJ_ROS-2338_02028.tif",
+      "present_tiff_size": 3160148752,
+      "removed_stale_entries": [],
+      "manifest_sha256_before": "5571d66d22fae33bc23c79328382009de957d2721c2ac9c26e8035dc62154b92",
+      "manifest_sha256_after": "cf3c0877ca45931a923d4254a760ce2dd38c322e02f9102ed5c9e0f169f7a493"
+    },
+    {
+      "scan_id": "scan9G23WO79",
+      "session_timestamp": "2026-09-08 11:45:18.435",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WO79_sess9G23WO79/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2338",
+      "present_tiff_name": "scan9G23WO79_JJ_ROS-2338_02030.tif",
+      "present_tiff_size": 2370116808,
+      "removed_stale_entries": [],
+      "manifest_sha256_before": "e39ff267db19d3ead8480bb33cb521b7bfdc8819d4466b2d15ee095fc6ce2e38",
+      "manifest_sha256_after": "cefc7c57171bbe129161e468ff15d454537a3121ddf3ea839cce57104704b911"
+    },
+    {
+      "scan_id": "scan9G23WWL9",
+      "session_timestamp": "2026-09-08 12:00:57.798",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WWL9_sess9G23WWL9/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2335",
+      "present_tiff_name": "scan9G23WWL9_JJ_ROS-2338_02031.tif",
+      "present_tiff_size": 3160148746,
+      "removed_stale_entries": [],
+      "manifest_sha256_before": "16528b35cbb5fa37a38b879f6a999dd5de8417d2f7f4553a79282ce0af3f6276",
+      "manifest_sha256_after": "2395a479ef4d20adbeb714c35c6b7a1ccc37059cacd07f33c34f3cd7a28b56ae"
+    },
+    {
+      "scan_id": "scan9G23WZPO",
+      "session_timestamp": "2026-09-08 12:06:47.431",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WZPO_sess9G23WZPO/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2335",
+      "present_tiff_name": "scan9G23WZPO_JJ_ROS-2338_02032.tif",
+      "present_tiff_size": 3160148750,
+      "removed_stale_entries": [],
+      "manifest_sha256_before": "8f190d8f571558ffa084a6a597e9332b43aae0540bbe91d197380d5a0e9d7b9b",
+      "manifest_sha256_after": "bc8c8965764ff9a95739bc50f987e1c8906662aac35874c0edc892c26104b468"
+    },
+    {
+      "scan_id": "scan9G23X3A9",
+      "session_timestamp": "2026-09-08 12:13:27.389",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23X3A9_sess9G23X3A9/collection_manifest.json",
+      "animal_id_before": "ROS-2338",
+      "animal_id_after": "ROS-2335",
+      "present_tiff_name": "scan9G23X3A9_JJ_ROS-2338_02034.tif",
+      "present_tiff_size": 2370116808,
+      "removed_stale_entries": [
+        {
+          "name": "scan9G23X3A9_JJ_ROS-2338_02033.tif",
+          "bytes": 588912098.0
+        }
+      ],
+      "manifest_sha256_before": "f5bc2715dda872baf19f8c27b9c27154346c30883ec220149f3eec0ce2bf8ae5",
+      "manifest_sha256_after": "97b4f9befb8c926b100b0964ee968eecd4c3de3f5fa4cbe730f7fab3bb81c0b1"
+    }
+  ]
+}

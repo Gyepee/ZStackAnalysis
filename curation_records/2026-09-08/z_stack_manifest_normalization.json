@@ -1,0 +1,182 @@
+{
+  "schema_version": "zstack_analysis.z_stack_manifest_normalization.v1",
+  "recorded_at_utc": "2026-09-08T10:56:03.747146+00:00",
+  "acquisition_date": "2026-09-08",
+  "normalization": "Replace empty start/end plus frame-expanded zs_um with scalar start_um, end_um, and uniform step metadata while preserving acquisition settings.",
+  "sessions": [
+    {
+      "scan_id": "scan9G23WFYJ",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WFYJ_sess9G23WFYJ/collection_manifest.json",
+      "manifest_sha256_before": "813d69877e98831ae59eb014b09991e881b72d7d6d1e4abfd13d28611b101e96",
+      "manifest_sha256_after": "84b82d61be2d4115679df123a94b6f4b3552c1b885ba4cc5b1c4b885c4749ffc",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1210.469,
+        "end_um": 1408.469,
+        "step_um": 2,
+        "num_slices": 100,
+        "frames_per_slice": 60,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 6000,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    },
+    {
+      "scan_id": "scan9G23WITP",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WITP_sess9G23WITP/collection_manifest.json",
+      "manifest_sha256_before": "cf3c0877ca45931a923d4254a760ce2dd38c322e02f9102ed5c9e0f169f7a493",
+      "manifest_sha256_after": "e99cc00dc0eb6581d98adbfb7dc8fb2a41b8587c5ef996c0e4ec55d5541f51cc",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1337.469,
+        "end_um": 1535.469,
+        "step_um": 2,
+        "num_slices": 100,
+        "frames_per_slice": 60,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 6000,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    },
+    {
+      "scan_id": "scan9G23WO79",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WO79_sess9G23WO79/collection_manifest.json",
+      "manifest_sha256_before": "cefc7c57171bbe129161e468ff15d454537a3121ddf3ea839cce57104704b911",
+      "manifest_sha256_after": "3c554a6022c44e552364751ce21249632bc1b6f375a191a8604b2015b5f1a1cf",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1344.414,
+        "end_um": 1442.414,
+        "step_um": 2,
+        "num_slices": 50,
+        "frames_per_slice": 90,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 4500,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    },
+    {
+      "scan_id": "scan9G23WWL9",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WWL9_sess9G23WWL9/collection_manifest.json",
+      "manifest_sha256_before": "2395a479ef4d20adbeb714c35c6b7a1ccc37059cacd07f33c34f3cd7a28b56ae",
+      "manifest_sha256_after": "cdeb974d2bcf9ebd2f40dca768f42aa1149b8e30989df052de916c852c1f248e",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1126.133,
+        "end_um": 1324.133,
+        "step_um": 2,
+        "num_slices": 100,
+        "frames_per_slice": 60,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 6000,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    },
+    {
+      "scan_id": "scan9G23WZPO",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23WZPO_sess9G23WZPO/collection_manifest.json",
+      "manifest_sha256_before": "bc8c8965764ff9a95739bc50f987e1c8906662aac35874c0edc892c26104b468",
+      "manifest_sha256_after": "1ac4eb4c68308c5f725a2b588cda536408eb6404bf347465ba2e89a9bfaca97a",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1126.133,
+        "end_um": 1324.133,
+        "step_um": 2,
+        "num_slices": 100,
+        "frames_per_slice": 60,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 6000,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    },
+    {
+      "scan_id": "scan9G23X3A9",
+      "manifest_path": "/datajoint-data/data/jisooj/JJ_ROS-2338_2026-09-08_scan9G23X3A9_sess9G23X3A9/collection_manifest.json",
+      "manifest_sha256_before": "97b4f9befb8c926b100b0964ee968eecd4c3de3f5fa4cbe730f7fab3bb81c0b1",
+      "manifest_sha256_after": "8ba90d0e70a57e99de96d4379a1dc8e3d1edc06df309442b4d8b482f39294577",
+      "z_stack": {
+        "enabled": true,
+        "definition": "uniform",
+        "mode": "slow",
+        "actuator": "motor",
+        "fast_waveform": "step",
+        "start_um": 1197.57,
+        "end_um": 1295.57,
+        "step_um": 2,
+        "num_slices": 50,
+        "frames_per_slice": 90,
+        "num_volumes": 1,
+        "return_home": true,
+        "centered": false,
+        "close_shutter_between_slices": false,
+        "use_start_end_powers": true
+      },
+      "removed_redundant_zs_um_value_count": 4500,
+      "validation": {
+        "unique_z_count_matches_num_slices": true,
+        "uniform_step_matches_step_um": true,
+        "frame_expanded_z_count_matches": true
+      }
+    }
+  ]
+}

@@ -34,6 +34,10 @@ class StackMetadata:
     saved_channels: tuple[int, ...]
     n_slices: int
     frames_per_slice: int
+    log_average_factor: int
+    log_average_disable_divide: bool
+    stored_frames_per_slice: int
+    storage_aggregation: str
     expected_pages: int
     expected_tiff_pages: int
     height_px: int
@@ -90,6 +94,28 @@ def normalize_saved_channels(value: Any) -> tuple[int, ...]:
     return channels
 
 
+def derive_storage_layout(
+    frames_per_slice: int,
+    log_average_factor: int,
+    log_average_disable_divide: bool,
+) -> tuple[int, str]:
+    """Return stored images per slice and the ScanImage file aggregation."""
+    if frames_per_slice < 1 or log_average_factor < 1:
+        raise ValueError("frames_per_slice and log_average_factor must be positive")
+    if log_average_factor > frames_per_slice:
+        raise ValueError("logAverageFactor exceeds framesPerSlice")
+    if frames_per_slice % log_average_factor:
+        raise ValueError("framesPerSlice is not divisible by logAverageFactor")
+    stored_frames_per_slice = frames_per_slice // log_average_factor
+    if log_average_factor == 1:
+        aggregation = "raw_frame"
+    elif log_average_disable_divide:
+        aggregation = "logged_sum"
+    else:
+        aggregation = "logged_mean"
+    return stored_frames_per_slice, aggregation
+
+
 def collapse_z_positions(values: Any, frames_per_slice: int) -> tuple[float, ...]:
     if not isinstance(values, (list, tuple, np.ndarray)):
         raise ValueError("SI.hStackManager.zs is not a sequence")
@@ -137,6 +163,16 @@ def parse_stack_metadata(path: Path) -> StackMetadata:
         frame_data.get("SI.hStackManager.framesPerSlice"),
         "SI.hStackManager.framesPerSlice",
     )
+    log_average_factor = _positive_int(
+        frame_data.get("SI.hScan2D.logAverageFactor", 1),
+        "SI.hScan2D.logAverageFactor",
+    )
+    log_average_disable_divide = bool(
+        frame_data.get("SI.hScan2D.logAverageDisableDivide", False)
+    )
+    stored_frames_per_slice, storage_aggregation = derive_storage_layout(
+        frames_per_slice, log_average_factor, log_average_disable_divide
+    )
     z_positions = collapse_z_positions(
         frame_data.get("SI.hStackManager.zs"), frames_per_slice
     )
@@ -170,8 +206,12 @@ def parse_stack_metadata(path: Path) -> StackMetadata:
         saved_channels=saved_channels,
         n_slices=n_slices,
         frames_per_slice=frames_per_slice,
+        log_average_factor=log_average_factor,
+        log_average_disable_divide=log_average_disable_divide,
+        stored_frames_per_slice=stored_frames_per_slice,
+        storage_aggregation=storage_aggregation,
         expected_pages=n_slices * frames_per_slice,
-        expected_tiff_pages=n_slices * frames_per_slice * len(saved_channels),
+        expected_tiff_pages=n_slices * stored_frames_per_slice * len(saved_channels),
         height_px=height,
         width_px=width,
         dtype=dtype,
