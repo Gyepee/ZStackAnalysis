@@ -5,3 +5,4 @@ __pycache__/
 .staging/
 analysis_runs/
 failed_runs/
+background_jobs/
